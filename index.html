@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #c4e23e;
+        }
+
+        #container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #00eeff;
+        }
+
+        #errorMessage {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .ad-container {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Social Media Downloader</h1>
+        <p>Paste the link of the social media content you want to download:</p>
+        <input type="text" id="linkInput" placeholder="Enter link here">
+        <button onclick="downloadContent()">Download</button>
+        <p id="errorMessage"></p>
+    </div>
+
+    <div class="ad-container">
+        
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9631171014293536"
+     crossorigin="anonymous"></script>
+    </div>
+
+    <script>
+        async function downloadContent() {
+            const linkInput = document.getElementById('linkInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const downloadButton = document.getElementById('downloadButton');
+    
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',  // Specify the HTTP method (GET, POST, etc.)
+                    headers: {
+                        'Content-Type': 'application/json',  // Set the request content type
+                    },
+                    body: JSON.stringify({ url: linkInput }),  // Send data in the request body
+                });
+    
+                const data = await response.json();  // Parse the response JSON
+    
+                if (data.downloadLink) {
+                    downloadButton.innerHTML = '<a href="' + data.downloadLink + '" download>Download</a>';
+                } else {
+                    errorMessage.textContent = 'Content cannot be downloaded.';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred.';
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
